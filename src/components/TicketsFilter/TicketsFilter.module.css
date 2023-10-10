@@ -1,0 +1,42 @@
+.containter {
+  width: 232px;
+  height: 232px;
+  margin: 0 10%;
+  /* padding: 20px; */
+  background-color: #ffffff;
+}
+
+p {
+  padding: 20px 20px;
+
+  color: #4A4A4A;
+  font-family: 'Open Sans';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+
+form {
+  width: 232px;
+}
+
+.check {
+  padding: 10px 20px;
+  display: flex;
+  width: 232px;
+  height: 40px;
+  /* background-color: #bdbbbb; */
+}
+
+label {
+  text-align: center;
+  padding: 0 10px;
+}
+
+.check:hover {
+  background-color: #F1FCFF;
+}
