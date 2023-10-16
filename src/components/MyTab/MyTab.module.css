@@ -1,0 +1,48 @@
+ .container {
+   min-width: 480px;
+ }
+
+ .tabs {
+   width: 100%;
+ }
+
+ .buttonActive:disabled {
+   width: 240px;
+   height: 40px;
+   border: none;
+   background-color: #2196F3;
+   position: relative;
+
+   color: #ffffff;
+   text-align: center;
+   font-family: Open Sans;
+   font-size: 12px;
+   font-style: normal;
+   font-weight: 600;
+   line-height: 20px;
+   letter-spacing: 0.5px;
+   text-transform: uppercase;
+ }
+
+ .buttonActive {
+   width: 240px;
+   height: 40px;
+   border: 1px solid #a8a8a8;
+   border-radius: 5px;
+   background-color: #ffffff;
+
+   color: #4A4A4A;
+   text-align: center;
+   font-family: Open Sans;
+   font-size: 12px;
+   font-style: normal;
+   font-weight: 600;
+   line-height: 20px;
+   letter-spacing: 0.5px;
+   text-transform: uppercase;
+ }
+
+ .content {
+   width: 480px;
+   height: 200px;
+ }

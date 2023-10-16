@@ -47,6 +47,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
+
+  user-select: none;
 }
 
 
@@ -55,6 +57,7 @@ main {
   height: auto;
   position: absolute;
   margin: 0 auto;
+
 }
 
 header {
@@ -67,4 +70,12 @@ header {
 .App {
   width: 100%;
   margin: 0 auto;
+}
+
+.ticketsContent {
+
+  justify-content: flex-start;
+  display: flex;
+  margin: 0 30vw;
+  /* width: 50%; */
 }

@@ -1,0 +1,12 @@
+.all {
+  width: 480px;
+  /* height: 172px; */
+}
+
+.buttonMore {
+  width: 480px;
+  height: 40px;
+  border: none;
+  background-color: #2196F3;
+  color: white;
+}
