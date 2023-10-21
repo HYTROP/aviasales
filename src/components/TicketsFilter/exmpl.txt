@@ -1,0 +1,280 @@
+import { useState } from "react";
+import ticketsStyle from "./TicketsFilter.module.css";
+import { setAllFilter, setFilter } from "../redux/filtersSlice";
+import { useDispatch } from "react-redux";
+
+function TicketsFilter() {
+  const dispatch = useDispatch();
+
+  // Используем один стейт для всех фильтров
+  const [filters, setFilters] = useState({
+    all: false,
+    filter1: false,
+    filter2: false,
+    filter3: false,
+  });
+
+  function handleFilterSetAll() {
+    // Если галочка "Все" включается, проставляем галочки всем остальным фильтрам
+    setFilters({
+      all: !filters.all,
+      filter1: !filters.all,
+      filter2: !filters.all,
+      filter3: !filters.all,
+    });
+
+    // Диспатчим экшн для обновления состояния в Redux
+    dispatch(setAllFilter(!filters.all));
+  }
+
+  function handleFilterSet1() {
+    // Если галочка 1 пересадка включается, проверяем состояние галочки "Все"
+    if (!filters.filter1) {
+      // Если галочка "Все" включена, снимаем ее
+      if (filters.all) {
+        setFilters({
+          all: false,
+          filter1: !filters.filter1,
+          filter2: filters.filter2,
+          filter3: filters.filter3,
+        });
+        dispatch(setAllFilter(false));
+      } else {
+        // Если галочка "Все" выключена, проставляем галочку 1 пересадка
+        setFilters({
+          ...filters,
+          filter1: !filters.filter1,
+        });
+      }
+    } else {
+      // Если галочка 1 пересадка снимается, снимаем также галочку "Все"
+      setFilters({
+        ...filters,
+        all: false,
+        filter1: !filters.filter1,
+      });
+      dispatch(setAllFilter(false));
+    }
+    dispatch(setFilter(!filters.filter1));
+  }
+
+  function handleFilterSet2() {
+    if (!filters.filter2) {
+      if (filters.all) {
+        setFilters({
+          all: false,
+          filter1: filters.filter1,
+          filter2: !filters.filter2,
+          filter3: filters.filter3,
+        });
+        dispatch(setAllFilter(false));
+      } else {
+        setFilters({
+          ...filters,
+          filter2: !filters.filter2,
+        });
+      }
+    } else {
+      setFilters({
+        ...filters,
+        all: false,
+        filter2: !filters.filter2,
+      });
+      dispatch(setAllFilter(false));
+    }
+
+    dispatch(setFilter(!filters.filter2));
+  }
+
+  function handleFilterSet3() {
+    if (!filters.filter3) {
+      if (filters.all) {
+        setFilters({
+          all: false,
+          filter1: filters.filter1,
+          filter2: filters.filter2,
+          filter3: !filters.filter3,
+        });
+        dispatch(setAllFilter(false));
+      } else {
+        setFilters({
+          ...filters,
+          filter3: !filters.filter3,
+        });
+      }
+    } else {
+      setFilters({
+        ...filters,
+        all: false,
+        filter3: !filters.filter3,
+      });
+      dispatch(setAllFilter(false));
+    }
+
+    dispatch(setFilter(!filters.filter3));
+  }
+
+  return (
+    <div className={ticketsStyle.containter}>
+      <p>количество пересадок</p>
+      <form>
+        <div className={ticketsStyle.check}>
+          <input
+            id="id1"
+            type="checkBox"
+            checked={filters.all}
+            onChange={() => handleFilterSetAll()}
+          />
+          <label htmlFor="id1">Все</label>
+          <br />
+        </div>
+
+        <div className={ticketsStyle.check}>
+          <input
+            type="checkBox"
+            id="id2"
+            checked={filters.filter1}
+            onChange={() => handleFilterSet1()}
+          />
+          <label htmlFor="id2">1 пересадка</label>
+          <br />
+        </div>
+        <div className={ticketsStyle.check}>
+          <input
+            type="checkBox"
+            id="id3"
+            checked={filters.filter2}
+            onChange={() => handleFilterSet2()}
+          />
+          <label htmlFor="id3">2 пересадки</label>
+          <br />
+        </div>
+        <div className={ticketsStyle.check}>
+          <input
+            type="checkBox"
+            id="id4"
+            checked={filters.filter3}
+            onChange={() => handleFilterSet3()}
+          />
+          <label htmlFor="id4">3 пересадки</label>
+          <br />
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default TicketsFilter;
+
+
+
+
+
+import { configureStore } from "@reduxjs/toolkit";
+
+import filtersReducer from "./filtersSlice";
+// import { composeWithDevTools } from "redux-devtools-extension";
+
+// ДОБАВИТЬ РЕДЮСЕР ДЛЯ БИЛЕТОВ!!
+
+const store = configureStore({
+  reducer: {
+    filters: filtersReducer,
+  }
+})
+export default store;
+
+
+
+
+// const filtersSlice = createSlice({
+//   name: "filters",
+//   initialState,
+//   reducers: {
+//     setAllFilter(state, action) {
+//       state.checkBoxes = action.payload;
+//     },
+//   },
+// });
+
+// export const { setAllFilter } = filtersSlice.actions;
+
+
+
+// create slice
+const filtersSlice = createSlice({
+name: 'filters',
+initialState,
+reducers: {
+setAllFilter: (state, action) => {
+state.checkBoxes = action.payload;
+}}})
+// export action creators
+export const { setAllFilter } = filtersSlice.actions;
+
+// export reducer
+export default filtersSlice.reducer;
+
+
+const handleFilterSet = (id) => {
+    let updatedCheckBoxes;
+    const index = checkBoxes.findIndex((item) => item.id === id);
+    if (checkBoxes[index].title === "Все") {
+      const newIsChecked = !checkBoxes[index].isChecked;
+
+      updatedCheckBoxes = checkBoxes.map((item) => ({
+        ...item,
+        isChecked: newIsChecked,
+      }));
+    } else {
+      const tempCheckBoxes = [...checkBoxes];
+      tempCheckBoxes[index].isChecked = !tempCheckBoxes[index].isChecked;
+      updatedCheckBoxes = [...tempCheckBoxes];
+
+      let isAllChecked = true;
+      for (let i = 0; i < tempCheckBoxes.length; i++) {
+        if (tempCheckBoxes[i].title === "Все") continue;
+        const isChecked = tempCheckBoxes[i].isChecked;
+        if (!isChecked) {
+          isAllChecked = false;
+          break;
+        }
+      }
+      const allIndex = tempCheckBoxes.findIndex((item) => item.title === "Все");
+      tempCheckBoxes[allIndex].isChecked = isAllChecked;
+      updatedCheckBoxes = [...tempCheckBoxes];
+    }
+    dispatch(setAllFilter(updatedCheckBoxes));
+  };
+
+
+
+  function handleFilterSet(id) {
+    let updatedCheckBoxes;
+    const index = checkBoxes.findIndex((item) => item.id === id);
+    if (checkBoxes[index].title === "Все") {
+      const newIsChecked = !checkBoxes[index].isChecked;
+
+      updatedCheckBoxes = checkBoxes.map((item) => ({
+        ...item,
+        isChecked: newIsChecked,
+      }));
+    } else {
+      checkBoxes[index].isChecked = !checkBoxes[index].isChecked;
+      updatedCheckBoxes = [...checkBoxes];
+
+      let isAllChecked = true;
+      for (let i = 0; i < checkBoxes.length; i++) {
+        if (checkBoxes[i].title === "Все") continue;
+        const isChecked = checkBoxes[i].isChecked;
+        if (!isChecked) {
+          isAllChecked = false;
+          break;
+        }
+      }
+      const allIndex = checkBoxes.findIndex((item) => item.title === "Все");
+      checkBoxes[allIndex].isChecked = isAllChecked;
+      updatedCheckBoxes = [...checkBoxes];
+    }
+    dispatch(setAllFilter(updatedCheckBoxes));
+  }

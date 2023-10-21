@@ -8,13 +8,13 @@ const MyTab = () => {
     {
       id: "id1",
       tabTitle: "САМЫЙ ДЕШЕВЫЙ",
-      title: <TicketsList />,
+      title: <TicketsList />, // СДЕЛАТЬ ФИЛЬТР
       content: [],
     },
     {
       id: "id2",
       tabTitle: "САМЫЙ БЫСТРЫЙ",
-      title: "title2",
+      title: <TicketsList />, // СДЕЛАТЬ ФИЛЬТР
       content: [],
     },
   ];
