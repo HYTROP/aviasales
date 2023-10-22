@@ -1,37 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { applyMiddleware, configureStore } from '@reduxjs/toolkit';
+import thunk from 'redux-thunk';
 import filtersReducer from './filtersSlice';
-// import ticketsReducer from './ticketsSlice';
+import ticketsReducer from './ticketsSlice';
 
 const store = configureStore({
   reducer: {
     filters: filtersReducer,
-    // tickets: ticketsReducer,
+    tickets: ticketsReducer,
   },
-});
+}, applyMiddleware(thunk));
 
 export default store;
-
-
-
-
-
-
-
-
-
-
-
-
-// import { combineReducers, createStore } from "redux";
-// import filtersReducer from "./filtersSlice";
-
-// // ДОБАВИТЬ РЕДЮСЕР ДЛЯ БИЛЕТОВ!!
-
-
-// const rootReducer = combineReducers({
-//   filters: filtersReducer,
-//   // tickets : ticketsReducer;
-// })
-
-// const store = createStore(rootReducer);
-// export default store;

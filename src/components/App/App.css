@@ -74,7 +74,6 @@ header {
 
 .ticketsContent {
 
-  justify-content: flex-start;
   display: flex;
   margin: 0 30vw;
   /* width: 50%; */

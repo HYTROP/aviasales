@@ -10,56 +10,40 @@ export const initialState = {
     },
     {
       id: "2",
-      title: "1 пересадка",
+      title: "Без пересадок",
       isChecked: false,
     },
     {
       id: "3",
-      title: "2 пересадка",
+      title: "1 пересадка",
       isChecked: false,
     },
     {
       id: "4",
-      title: "3 пересадка",
+      title: "2 пересадки",
+      isChecked: false,
+    },
+    {
+      id: "5",
+      title: "3 пересадки",
       isChecked: false,
     },
   ],
 };
 
-// create slice
+// create slice >>
 const filtersSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
-    setAllFilter: (state, action) => {
+    setAllFilter(state, action) {
       state.checkBoxes = action.payload;
     },
   },
 });
-// export action creators
+
+// export action creators >>
 export const { setAllFilter } = filtersSlice.actions;
 
 // export reducer
 export default filtersSlice.reducer;
-
-// // Action creators >>
-// export function setAllFilter(filterStatus) {
-//   return {
-//     type: "filters/all/set",
-//     payload: filterStatus,
-//   };
-// }
-
-// // REDUCERS >>
-// export default function filtersReducer(state = initialState, action) {
-//   switch (action.type) {
-//     case "filters/all/set":
-//       return {
-//         ...state,
-//         checkBoxes: action.payload,
-//       };
-
-//     default:
-//       return state;
-//   }
-// }
