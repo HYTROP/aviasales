@@ -42,6 +42,14 @@ const filtersSlice = createSlice({
   },
 });
 
+export function filterTickets(newCheckBoxes) {
+  return function (dispatch, getState) {
+    dispatch({ type: 'filters/setAllFilter', payload: newCheckBoxes })
+
+    // dispatch({ type: 'tickets/showMoreTickets', payload: true })
+  }
+}
+
 // export action creators >>
 export const { setAllFilter } = filtersSlice.actions;
 

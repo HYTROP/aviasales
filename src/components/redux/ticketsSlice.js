@@ -1,58 +1,90 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { current, createSlice } from "@reduxjs/toolkit";
 import { _apiBase } from "../api/AviaAPI";
 import { _getTickets } from "../api/AviaAPI";
-
+const limit = 5;
 export const initialState = {
-  ticketsFetch: [],
-  isLoading: false,
+  ticketsData: [],
+  isLoading: null,
+  displayedTickets: [],
+  pageNumber: 1,
 };
 
 const ticketsSlice = createSlice({
   name: "tickets",
   initialState,
   reducers: {
-    fetchTicketsSuccess(state, action) {
-      state.ticketsFetch = action.payload;
-      state.isLoading = false;
+    fetchTicketsSuccess: (state, action) => {
+      const prevState = current(state)
+      console.log(prevState)
+      console.log(action.payload)
+      state.ticketsData = [...prevState.ticketsData, ...action.payload.tickets]
     },
-    isLoadingTickets(state) {
-      state.isLoading = true;
+    isLoadingTickets: (state, action) => {
+      state.isLoading = action.payload;
     },
+    showMoreTickets(state, action) {
+      const prevState = current(state)
+      const newTickets = prevState.ticketsData.slice(limit * prevState.pageNumber - limit, limit * prevState.pageNumber)
+      const prevTickets = !action.payload ? prevState.displayedTickets : []
+      state.displayedTickets = [...prevTickets, ...newTickets]
+      state.pageNumber++;
+    },
+    sortTicketsSuccess(state, action) {
+      console.log('sort tickets')
+      const prevState = current(state);
+      state.ticketsData = [...action.payload(prevState.ticketsData)];
+
+    }
   },
 });
+let searchQuery = '';
 
-export function fetchTicketsSuccess() {
+export function fetchTickets() {
   return async function ticketFetching(dispatch, getState) {
-    dispatch({ type: "tickets/isLoadingTickets" });
+    dispatch({ type: "tickets/isLoadingTickets", payload: true });
     // LOADING
     try {
-      const searchResponse = await fetch(
-        "https://aviasales-test-api.kata.academy/search"
-      );
-      if (!searchResponse.ok) {
-        throw new Error("Ошибка при выполнении запроса 0");
-      }
-      const data = await searchResponse.json();
+      if (!searchQuery) {
+        const searchResponse = await fetch(
+          `${_apiBase}/search`
+        );
+        if (!searchResponse.ok) {
+          throw new Error("Ошибка при выполнении запроса search Id");
+        }
+        const searchIdGenerator = await searchResponse.json();
 
-      const value = Object.values(data);
+        searchQuery = Object.values(searchIdGenerator);
+      }
+
 
       const ticketResponse = await fetch(
-        // `${_apiBase}${_getTickets}${_searchId}`
-        `${_apiBase}${_getTickets}searchId=${value}`
+        `${_apiBase}${_getTickets}searchId=${searchQuery}`
       );
 
       if (!ticketResponse.ok) {
         throw new Error("Ошибка при выполнении запроса 2");
       }
-      const secondData = await ticketResponse.json();
+      const data = await ticketResponse.json();
+      dispatch({ type: "tickets/fetchTicketsSuccess", payload: data });
+      if (!data.stop) {
 
-      console.log(secondData);
+        dispatch(fetchTickets());
+      } else {
+        dispatch({ type: "tickets/isLoadingTickets", payload: false });
+      }
 
-      dispatch({ type: "tickets/fetchTicketsSuccess", payload: secondData });
     } catch (error) {
       console.error(error);
+      dispatch(fetchTickets());
     }
   };
+}
+
+export function sortTickets(sortFunction) {
+  return function (dispatch, getState) {
+    dispatch({ type: 'tickets/sortTicketsSuccess', payload: sortFunction })
+    dispatch({ type: 'tickets/showMoreTickets', payload: true })
+  }
 }
 
 export default ticketsSlice.reducer;

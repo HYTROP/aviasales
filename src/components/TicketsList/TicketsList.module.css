@@ -1,6 +1,6 @@
 .all {
   width: 480px;
-  /* height: 172px; */
+
 }
 
 .buttonMore {
@@ -9,4 +9,5 @@
   border: none;
   background-color: #2196F3;
   color: white;
+  /* position: fixed; */
 }

@@ -1,7 +1,6 @@
-import { setAllFilter } from "../redux/filtersSlice";
 import ticketsStyle from "./TicketsFilter.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTicketsSuccess } from "../redux/ticketsSlice";
+import { filterTickets } from "../redux/filtersSlice";
 
 function TicketsFilter() {
   const dispatch = useDispatch();
@@ -44,12 +43,8 @@ function TicketsFilter() {
       updatedCheckBoxes = tempCheckBoxes;
     }
 
-    dispatch(setAllFilter(updatedCheckBoxes));
+    dispatch(filterTickets(updatedCheckBoxes));
   };
-  function handleTicketFetch() {
-    if (!fetchTicketsSuccess) return;
-    dispatch(fetchTicketsSuccess());
-  }
 
   return (
     <div className={ticketsStyle.containter}>
@@ -62,7 +57,7 @@ function TicketsFilter() {
               type="checkBox"
               checked={item.isChecked}
               onChange={() => handleFilterSet(item.id)}
-              onClick={() => handleTicketFetch()}
+              // onClick={() => handleTicketFetch()}
             />
             <label htmlFor={item.id}>{item.title}</label>
             <br />

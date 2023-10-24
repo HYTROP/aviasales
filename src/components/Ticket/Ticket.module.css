@@ -1,5 +1,6 @@
 .cover {
   margin: 20px 20px 20px 0;
+  padding: 10px;
   width: 480px;
   height: 212px;
   /* border: 1px solid white; */
@@ -10,16 +11,16 @@
 }
 
 .h1 {
-  margin: 20px;
+  margin: 15px;
   width: 150px;
   height: 20px;
   color: #2196F3;
 }
 
 .logo {
-  margin: 20px;
+  margin: 15px;
   position: relative;
-  bottom: 60px;
+  bottom: 65px;
   float: right;
 }
 
