@@ -7,24 +7,6 @@ import TicketsList from "../TicketsList/TicketsList";
 import Spinner from "../assets/Spin";
 import { fetchTickets, sortTickets } from "../redux/ticketsSlice";
 
-export const tabs = [
-  {
-    id: "id1",
-    tabTitle: "САМЫЙ ДЕШЕВЫЙ",
-    sortFunction: (tickets) => {
-      return [...tickets].sort((a, b) => a.price - b.price);
-    },
-  },
-  {
-    id: "id2",
-    tabTitle: "САМЫЙ БЫСТРЫЙ",
-    sortFunction: (tickets) =>
-      [...tickets].sort(
-        (a, b) => a.segments[0].duration - b.segments[0].duration
-      ),
-  },
-];
-
 const MyTab = () => {
   const [currentTab, setCurrentTab] = useState("id1"); // закинуть в стейт редакса
 
@@ -37,7 +19,7 @@ const MyTab = () => {
   }, []);
 
   useEffect(() => {
-    console.log(isLoading);
+    // console.log(isLoading);
     if (isLoading === false) {
       // когда отработает фильтр а не лоадер
       const sortFunc = getSortFunc();

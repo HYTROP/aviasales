@@ -2,10 +2,12 @@ import { current, createSlice } from "@reduxjs/toolkit";
 import { _apiBase } from "../api/AviaAPI";
 import { _getTickets } from "../api/AviaAPI";
 const limit = 5;
+let result = [];
 export const initialState = {
   ticketsData: [],
   isLoading: null,
   displayedTickets: [],
+  filteredData: [],
   pageNumber: 1,
 };
 
@@ -14,30 +16,46 @@ const ticketsSlice = createSlice({
   initialState,
   reducers: {
     fetchTicketsSuccess: (state, action) => {
-      const prevState = current(state)
-      console.log(prevState)
-      console.log(action.payload)
-      state.ticketsData = [...prevState.ticketsData, ...action.payload.tickets]
+      const prevState = current(state);
+      // console.log(prevState)
+      // console.log(action.payload)
+      state.ticketsData = [...prevState.ticketsData, ...action.payload.tickets];
     },
     isLoadingTickets: (state, action) => {
       state.isLoading = action.payload;
     },
     showMoreTickets(state, action) {
-      const prevState = current(state)
-      const newTickets = prevState.ticketsData.slice(limit * prevState.pageNumber - limit, limit * prevState.pageNumber)
-      const prevTickets = !action.payload ? prevState.displayedTickets : []
-      state.displayedTickets = [...prevTickets, ...newTickets]
+      const prevState = current(state);
+      const newTickets = prevState.ticketsData.slice(
+        limit * prevState.pageNumber - limit,
+        limit * prevState.pageNumber
+      );
+      const prevTickets = !action.payload ? prevState.displayedTickets : [];
+      state.displayedTickets = [...prevTickets, ...newTickets];
       state.pageNumber++;
     },
     sortTicketsSuccess(state, action) {
-      console.log('sort tickets')
+      console.log("sort tickets");
       const prevState = current(state);
       state.ticketsData = [...action.payload(prevState.ticketsData)];
-
-    }
+    },
+    filterFunc(state, action) {
+      const prevState = current(state);
+      const arrayForFilter = prevState.ticketsData.map(
+        (item) => item.segments[0].stops.length
+      );
+      console.log(action.payload);
+      state.filteredData = action.payload.forEach(
+        (func) => {
+          return result.push(func(arrayForFilter));
+        }
+        // console.log(func)
+      );
+      console.log(state.filteredData);
+    },
   },
 });
-let searchQuery = '';
+let searchQuery = "";
 
 export function fetchTickets() {
   return async function ticketFetching(dispatch, getState) {
@@ -45,9 +63,7 @@ export function fetchTickets() {
     // LOADING
     try {
       if (!searchQuery) {
-        const searchResponse = await fetch(
-          `${_apiBase}/search`
-        );
+        const searchResponse = await fetch(`${_apiBase}/search`);
         if (!searchResponse.ok) {
           throw new Error("Ошибка при выполнении запроса search Id");
         }
@@ -55,7 +71,6 @@ export function fetchTickets() {
 
         searchQuery = Object.values(searchIdGenerator);
       }
-
 
       const ticketResponse = await fetch(
         `${_apiBase}${_getTickets}searchId=${searchQuery}`
@@ -67,12 +82,10 @@ export function fetchTickets() {
       const data = await ticketResponse.json();
       dispatch({ type: "tickets/fetchTicketsSuccess", payload: data });
       if (!data.stop) {
-
         dispatch(fetchTickets());
       } else {
         dispatch({ type: "tickets/isLoadingTickets", payload: false });
       }
-
     } catch (error) {
       console.error(error);
       dispatch(fetchTickets());
@@ -82,9 +95,9 @@ export function fetchTickets() {
 
 export function sortTickets(sortFunction) {
   return function (dispatch, getState) {
-    dispatch({ type: 'tickets/sortTicketsSuccess', payload: sortFunction })
-    dispatch({ type: 'tickets/showMoreTickets', payload: true })
-  }
+    dispatch({ type: "tickets/sortTicketsSuccess", payload: sortFunction });
+    dispatch({ type: "tickets/showMoreTickets", payload: true });
+  };
 }
 
 export default ticketsSlice.reducer;
