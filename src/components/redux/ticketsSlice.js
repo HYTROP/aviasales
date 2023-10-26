@@ -6,10 +6,10 @@ import { TABS } from "../MyTab/constants";
 const limit = 5;
 
 export const initialState = {
-  ticketsData: [], 
+  ticketsData: [],
   isLoading: null,
-  displayedTickets: [], 
-  filteredTickets: [], 
+  displayedTickets: [],
+  filteredTickets: [],
   pageNumber: 1,
   currentTabId: 1,
 };
@@ -31,7 +31,9 @@ const ticketsSlice = createSlice({
       const mainCheckBox = selectedCheckBoxes.filter(
         (checkBox) => checkBox.title === "Все"
       );
-      if (!selectedCheckBoxes.length || mainCheckBox.length) {
+      if (!selectedCheckBoxes.length) {
+        state.filteredTickets = []
+      } else if (mainCheckBox.length) {
         state.filteredTickets = [...prevState.ticketsData];
       } else {
         const filterFunctionsProp = selectedCheckBoxes.map(

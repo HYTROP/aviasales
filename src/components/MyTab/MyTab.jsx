@@ -9,9 +9,8 @@ import { fetchTickets, sortTickets } from "../redux/ticketsSlice";
 import { TABS } from "./constants";
 
 const MyTab = () => {
-  const { displayedTickets, isLoading, currentTabId } = useSelector(
-    (store) => store.tickets
-  );
+  const { displayedTickets, isLoading, currentTabId, filteredTickets } =
+    useSelector((store) => store.tickets);
 
   const dispatch = useDispatch();
 
@@ -46,17 +45,21 @@ const MyTab = () => {
       </div>
       <div className={TabStyle.content}>
         <div className={TabStyle.tabContent}>
-          {/* <span>Используйте фильтр для поиска билетов</span> */}
-          {isLoading ? <Spinner /> : ""}
+          {isLoading && <Spinner />}
+          {!displayedTickets.length && (
+            <div>Рейсов, подходящих под заданные фильтры, не найдено</div>
+          )}
           <TicketsList tickets={displayedTickets} />
         </div>
-        <button
-          type="button"
-          className={ListStyle.buttonMore}
-          onClick={() => dispatch({ type: "tickets/showMoreTickets" })}
-        >
-          ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!
-        </button>
+        {displayedTickets.length !== filteredTickets.length && (
+          <button
+            type="button"
+            className={ListStyle.buttonMore}
+            onClick={() => dispatch({ type: "tickets/showMoreTickets" })}
+          >
+            ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!
+          </button>
+        )}
       </div>
     </div>
 
