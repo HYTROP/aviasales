@@ -3,56 +3,51 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAllFilters } from "../redux/filtersSlice";
 import { useEffect } from "react";
 import { filterTickets } from "../redux/ticketsSlice";
+import { CHECKBOXES as checkBoxes } from "./constants";
 
 function TicketsFilter() {
   const dispatch = useDispatch();
 
-  const { checkBoxes } = useSelector((store) => store.filters);
+  const { selectedCheckBoxesId } = useSelector((store) => store.filters);
+
   const { isLoading } = useSelector((store) => store.tickets);
 
   useEffect(() => {
     if (isLoading === false) {
-      dispatch(filterTickets(checkBoxes));
+      dispatch(filterTickets(selectedCheckBoxesId));
     }
-  }, [isLoading, checkBoxes]);
+  }, [isLoading, selectedCheckBoxesId]);
 
   const handleFilterSet = (id) => {
-    const index = checkBoxes.findIndex((item) => item.id === id);
-    let updatedCheckBoxes;
+    // const index = selectedCheckBoxesId.findIndex((item) => item.id === id);
+    let newSelectedIds;
 
-    if (checkBoxes[index].title === "Все") {
-      const newIsChecked = !checkBoxes[index].isChecked;
-      updatedCheckBoxes = checkBoxes.map((item) => ({
-        ...item,
-        isChecked: newIsChecked,
-      }));
+    if (id === 1) {
+      const isChecked = selectedCheckBoxesId.includes(id);
+      newSelectedIds = !isChecked ? checkBoxes.map((item) => item.id) : [];
     } else {
-      const tempCheckBoxes = [...checkBoxes];
-      tempCheckBoxes[index] = {
-        ...tempCheckBoxes[index],
-        isChecked: !tempCheckBoxes[index].isChecked,
-      };
-
-      let isAllChecked = true;
-      for (let i = 0; i < tempCheckBoxes.length; i++) {
-        if (tempCheckBoxes[i].title === "Все") continue;
-        const isChecked = tempCheckBoxes[i].isChecked;
-        if (!isChecked) {
-          isAllChecked = false;
-          break;
-        }
+      newSelectedIds = [...selectedCheckBoxesId];
+      const isChecked = selectedCheckBoxesId.includes(id);
+      if (isChecked) {
+        const index = newSelectedIds.indexOf(id);
+        newSelectedIds.splice(index, 1);
+      } else {
+        newSelectedIds.push(id);
       }
+      const isAllChecked =
+        newSelectedIds.filter((id) => id !== 1).length ===
+        checkBoxes.length - 1;
 
-      const allIndex = tempCheckBoxes.findIndex((item) => item.title === "Все");
-      tempCheckBoxes[allIndex] = {
-        ...tempCheckBoxes[allIndex],
-        isChecked: isAllChecked,
-      };
-
-      updatedCheckBoxes = tempCheckBoxes;
+      const isMainChecked = newSelectedIds.includes(1);
+      if (isAllChecked && !isMainChecked) {
+        newSelectedIds.push(1);
+      } else if (!isAllChecked && isMainChecked) {
+        const index = newSelectedIds.indexOf(1);
+        newSelectedIds.splice(index, 1);
+      }
     }
 
-    dispatch(setAllFilters(updatedCheckBoxes));
+    dispatch(setAllFilters(newSelectedIds));
   };
 
   return (
@@ -64,7 +59,7 @@ function TicketsFilter() {
             <input
               id={item.id}
               type="checkBox"
-              checked={item.isChecked}
+              checked={selectedCheckBoxesId.includes(item.id)}
               onChange={() => handleFilterSet(item.id)}
               // onClick={() => handleTicketFetch()}
             />

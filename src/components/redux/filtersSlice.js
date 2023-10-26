@@ -2,37 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // INIT STATE >>
 export const initialState = {
-  checkBoxes: [
-    {
-      id: "1",
-      title: "Все",
-      isChecked: false,
-    },
-    {
-      id: "2",
-      title: "Без пересадок",
-      isChecked: false,
-      filterFunction: (tickets) => { return [...tickets].filter((item) => item.segments[0].stops.length === 0) },
-    },
-    {
-      id: "3",
-      title: "1 пересадка",
-      isChecked: false,
-      filterFunction: (tickets) => { return [...tickets].filter((item) => item.segments[0].stops.length === 1) },
-    },
-    {
-      id: "4",
-      title: "2 пересадки",
-      isChecked: false,
-      filterFunction: (tickets) => { return [...tickets].filter((item) => item.segments[0].stops.length === 2) },
-    },
-    {
-      id: "5",
-      title: "3 пересадки",
-      isChecked: false,
-      filterFunction: (tickets) => { return [...tickets].filter((item) => item.segments[0].stops.length === 3) },
-    },
-  ],
+  selectedCheckBoxesId: []
 };
 
 // create slice >>
@@ -41,7 +11,7 @@ const filtersSlice = createSlice({
   initialState,
   reducers: {
     setAllFilter(state, action) {
-      state.checkBoxes = action.payload;
+      state.selectedCheckBoxesId = action.payload;
     },
     setFilterCheckbox(state, action) {
       const { checkboxId, isChecked } = action.payload;
@@ -53,10 +23,10 @@ const filtersSlice = createSlice({
   },
 });
 
-export function setAllFilters(newCheckBoxes) {
+export function setAllFilters(newCheckBoxesIds) {
 
   return function (dispatch, getState) {
-    dispatch(setAllFilter(newCheckBoxes));
+    dispatch(setAllFilter(newCheckBoxesIds));
   };
 }
 

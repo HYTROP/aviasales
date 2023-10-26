@@ -1,6 +1,7 @@
 import { current, createSlice } from "@reduxjs/toolkit";
 import { _apiBase } from "../api/AviaAPI";
 import { _getTickets } from "../api/AviaAPI";
+import { CHECKBOXES } from "../TicketsFilter/constants";
 const limit = 5;
 
 export const initialState = {
@@ -25,10 +26,7 @@ const ticketsSlice = createSlice({
     },
     filterFunc(state, action) {
       const prevState = current(state);
-      // Получить только выбранные фильтры
-      const selectedCheckBoxes = action.payload.filter(
-        (checkBox) => checkBox.isChecked
-      );
+      const selectedCheckBoxes = CHECKBOXES.filter(checkBox => action.payload.includes(checkBox.id))
       const mainCheckBox = selectedCheckBoxes.filter(
         (checkBox) => checkBox.title === "Все"
       );
@@ -112,9 +110,9 @@ export function sortTickets() {
     dispatch({ type: "tickets/showMoreTickets", payload: true });
   };
 }
-export function filterTickets(checkBoxes) {
+export function filterTickets(selectedCheckBoxesId) {
   return function (dispatch, getState) {
-    dispatch({ type: "tickets/filterFunc", payload: checkBoxes });
+    dispatch({ type: "tickets/filterFunc", payload: selectedCheckBoxesId });
     dispatch(sortTickets());
   };
 }
