@@ -2,15 +2,16 @@ import { current, createSlice } from "@reduxjs/toolkit";
 import { _apiBase } from "../api/AviaAPI";
 import { _getTickets } from "../api/AviaAPI";
 import { CHECKBOXES } from "../TicketsFilter/constants";
+import { TABS } from "../MyTab/constants";
 const limit = 5;
 
 export const initialState = {
-  ticketsData: [], // храним после фетча
+  ticketsData: [], 
   isLoading: null,
-  displayedTickets: [], // отображаем после сортировки
-  filteredTickets: [], // храним после фильтрации и фетча
+  displayedTickets: [], 
+  filteredTickets: [], 
   pageNumber: 1,
-  currentTab: {},
+  currentTabId: 1,
 };
 
 const ticketsSlice = createSlice({
@@ -45,8 +46,10 @@ const ticketsSlice = createSlice({
       }
     },
     sortTicketsSuccess(state, action) {
+      const tab = TABS.find(item => item.id === action.payload);
+      const sortFunction = tab.sortFunction;
       const prevState = current(state);
-      const sortedTickets = action.payload(prevState.filteredTickets);
+      const sortedTickets = sortFunction(prevState.filteredTickets);
 
       state.filteredTickets = sortedTickets;
     },
@@ -61,7 +64,7 @@ const ticketsSlice = createSlice({
       state.pageNumber++;
     },
     setCurrentTab(state, action) {
-      state.currentTab = action.payload;
+      state.currentTabId = Number(action.payload);
     },
   },
 });
@@ -105,8 +108,8 @@ export function fetchTickets() {
 
 export function sortTickets() {
   return function (dispatch, getState) {
-    const sortFunction = getState().tickets.currentTab.sortFunction;
-    dispatch({ type: "tickets/sortTicketsSuccess", payload: sortFunction });
+    const id = getState().tickets.currentTabId
+    dispatch({ type: "tickets/sortTicketsSuccess", payload: id });
     dispatch({ type: "tickets/showMoreTickets", payload: true });
   };
 }

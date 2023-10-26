@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// REDUCER, INITIAL STATE, ACTIONS
-
 const initialState = {
   price: false,
   speed: false,

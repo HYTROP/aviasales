@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// INIT STATE >>
 export const initialState = {
   selectedCheckBoxesId: []
 };
 
-// create slice >>
 const filtersSlice = createSlice({
   name: "filters",
   initialState,
@@ -30,8 +28,5 @@ export function setAllFilters(newCheckBoxesIds) {
   };
 }
 
-// export action creators >>
 export const { setAllFilter } = filtersSlice.actions;
-
-// export reducer
 export default filtersSlice.reducer;

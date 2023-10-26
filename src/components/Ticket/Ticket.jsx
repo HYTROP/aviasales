@@ -1,5 +1,4 @@
 import TicketCard from "./Ticket.module.css";
-// import { useSelector } from "react-redux";
 
 const Tickets = ({ price, carrier, segments }) => {
   let segment = segments[0];

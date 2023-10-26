@@ -19,7 +19,6 @@ function TicketsFilter() {
   }, [isLoading, selectedCheckBoxesId]);
 
   const handleFilterSet = (id) => {
-    // const index = selectedCheckBoxesId.findIndex((item) => item.id === id);
     let newSelectedIds;
 
     if (id === 1) {
@@ -61,7 +60,6 @@ function TicketsFilter() {
               type="checkBox"
               checked={selectedCheckBoxesId.includes(item.id)}
               onChange={() => handleFilterSet(item.id)}
-              // onClick={() => handleTicketFetch()}
             />
             <label htmlFor={item.id}>{item.title}</label>
             <br />
