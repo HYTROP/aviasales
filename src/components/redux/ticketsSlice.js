@@ -2,13 +2,14 @@ import { current, createSlice } from "@reduxjs/toolkit";
 import { _apiBase } from "../api/AviaAPI";
 import { _getTickets } from "../api/AviaAPI";
 const limit = 5;
-let result = [];
+
 export const initialState = {
-  ticketsData: [],
+  ticketsData: [], // храним после фетча
   isLoading: null,
-  displayedTickets: [],
-  filteredData: [],
+  displayedTickets: [], // отображаем после сортировки
+  filteredTickets: [], // храним после фильтрации и фетча
   pageNumber: 1,
+  currentTab: {},
 };
 
 const ticketsSlice = createSlice({
@@ -17,16 +18,43 @@ const ticketsSlice = createSlice({
   reducers: {
     fetchTicketsSuccess: (state, action) => {
       const prevState = current(state);
-      // console.log(prevState)
-      // console.log(action.payload)
       state.ticketsData = [...prevState.ticketsData, ...action.payload.tickets];
     },
     isLoadingTickets: (state, action) => {
       state.isLoading = action.payload;
     },
+    filterFunc(state, action) {
+      const prevState = current(state);
+      // Получить только выбранные фильтры
+      const selectedCheckBoxes = action.payload.filter(
+        (checkBox) => checkBox.isChecked
+      );
+      const mainCheckBox = selectedCheckBoxes.filter(
+        (checkBox) => checkBox.title === "Все"
+      );
+      if (!selectedCheckBoxes.length || mainCheckBox.length) {
+        state.filteredTickets = [...prevState.ticketsData];
+      } else {
+        const filterFunctionsProp = selectedCheckBoxes.map(
+          (checkBox) => checkBox.filterFunction
+        );
+
+        let resultArray = [];
+        filterFunctionsProp.forEach((func) => {
+          return resultArray.push(...func(prevState.ticketsData));
+        });
+        state.filteredTickets = resultArray;
+      }
+    },
+    sortTicketsSuccess(state, action) {
+      const prevState = current(state);
+      const sortedTickets = action.payload(prevState.filteredTickets);
+
+      state.filteredTickets = sortedTickets;
+    },
     showMoreTickets(state, action) {
       const prevState = current(state);
-      const newTickets = prevState.ticketsData.slice(
+      const newTickets = prevState.filteredTickets.slice(
         limit * prevState.pageNumber - limit,
         limit * prevState.pageNumber
       );
@@ -34,24 +62,8 @@ const ticketsSlice = createSlice({
       state.displayedTickets = [...prevTickets, ...newTickets];
       state.pageNumber++;
     },
-    sortTicketsSuccess(state, action) {
-      console.log("sort tickets");
-      const prevState = current(state);
-      state.ticketsData = [...action.payload(prevState.ticketsData)];
-    },
-    filterFunc(state, action) {
-      const prevState = current(state);
-      const arrayForFilter = prevState.ticketsData.map(
-        (item) => item.segments[0].stops.length
-      );
-      console.log(action.payload);
-      state.filteredData = action.payload.forEach(
-        (func) => {
-          return result.push(func(arrayForFilter));
-        }
-        // console.log(func)
-      );
-      console.log(state.filteredData);
+    setCurrentTab(state, action) {
+      state.currentTab = action.payload;
     },
   },
 });
@@ -60,7 +72,7 @@ let searchQuery = "";
 export function fetchTickets() {
   return async function ticketFetching(dispatch, getState) {
     dispatch({ type: "tickets/isLoadingTickets", payload: true });
-    // LOADING
+
     try {
       if (!searchQuery) {
         const searchResponse = await fetch(`${_apiBase}/search`);
@@ -93,10 +105,17 @@ export function fetchTickets() {
   };
 }
 
-export function sortTickets(sortFunction) {
+export function sortTickets() {
   return function (dispatch, getState) {
+    const sortFunction = getState().tickets.currentTab.sortFunction;
     dispatch({ type: "tickets/sortTicketsSuccess", payload: sortFunction });
     dispatch({ type: "tickets/showMoreTickets", payload: true });
+  };
+}
+export function filterTickets(checkBoxes) {
+  return function (dispatch, getState) {
+    dispatch({ type: "tickets/filterFunc", payload: checkBoxes });
+    dispatch(sortTickets());
   };
 }
 

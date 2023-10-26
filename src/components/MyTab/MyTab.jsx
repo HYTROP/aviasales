@@ -8,25 +8,22 @@ import Spinner from "../assets/Spin";
 import { fetchTickets, sortTickets } from "../redux/ticketsSlice";
 
 const MyTab = () => {
-  const [currentTab, setCurrentTab] = useState("id1"); // закинуть в стейт редакса
-
-  const { displayedTickets, isLoading } = useSelector((store) => store.tickets);
+  const { displayedTickets, isLoading, currentTab } = useSelector(
+    (store) => store.tickets
+  );
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch({ type: "tickets/setCurrentTab", payload: tabs[0] });
     dispatch(fetchTickets());
   }, []);
 
   useEffect(() => {
-    // console.log(isLoading);
     if (isLoading === false) {
-      // когда отработает фильтр а не лоадер
-      const sortFunc = getSortFunc();
-
-      dispatch(sortTickets(sortFunc));
+      dispatch(sortTickets());
     }
-  }, [isLoading, currentTab]);
+  }, [currentTab]);
 
   const tabs = [
     {
@@ -46,12 +43,13 @@ const MyTab = () => {
     },
   ];
 
-  function getSortFunc() {
-    return tabs.find((tab) => tab.id === currentTab).sortFunction;
-  }
+  // function getSortFunc() {
+  //   return tabs.find((tab) => tab.id === currentTab).sortFunction;
+  // }
 
   const handleTabClick = (e) => {
-    setCurrentTab(e.target.id);
+    const tab = tabs.find((tab) => tab.id === e.target.id);
+    dispatch({ type: "tickets/setCurrentTab", payload: tab });
   };
 
   return (
@@ -62,7 +60,7 @@ const MyTab = () => {
             className={TabStyle.buttonActive}
             key={i}
             id={tab.id}
-            disabled={currentTab === `${tab.id}`}
+            disabled={currentTab.id === `${tab.id}`}
             onClick={handleTabClick}
           >
             {tab.tabTitle}
@@ -73,7 +71,8 @@ const MyTab = () => {
       <div className={TabStyle.content}>
         <div className={TabStyle.tabContent}>
           {/* <span>Используйте фильтр для поиска билетов</span> */}
-          {isLoading ? <Spinner /> : <TicketsList tickets={displayedTickets} />}
+          {isLoading ? <Spinner /> : ""}
+          <TicketsList tickets={displayedTickets} />
         </div>
         <button
           type="button"

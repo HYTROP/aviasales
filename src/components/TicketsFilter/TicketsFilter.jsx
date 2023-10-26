@@ -1,11 +1,20 @@
 import ticketsStyle from "./TicketsFilter.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { filterTickets } from "../redux/filtersSlice";
+import { setAllFilters } from "../redux/filtersSlice";
+import { useEffect } from "react";
+import { filterTickets } from "../redux/ticketsSlice";
 
 function TicketsFilter() {
   const dispatch = useDispatch();
 
   const { checkBoxes } = useSelector((store) => store.filters);
+  const { isLoading } = useSelector((store) => store.tickets);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      dispatch(filterTickets(checkBoxes));
+    }
+  }, [isLoading, checkBoxes]);
 
   const handleFilterSet = (id) => {
     const index = checkBoxes.findIndex((item) => item.id === id);
@@ -43,7 +52,7 @@ function TicketsFilter() {
       updatedCheckBoxes = tempCheckBoxes;
     }
 
-    dispatch(filterTickets(updatedCheckBoxes));
+    dispatch(setAllFilters(updatedCheckBoxes));
   };
 
   return (

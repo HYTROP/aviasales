@@ -2,8 +2,6 @@ import TicketCard from "./Ticket.module.css";
 // import { useSelector } from "react-redux";
 
 const Tickets = ({ price, carrier, segments }) => {
-  // console.log("tickets >>", price);
-
   let segment = segments[0];
   let originForward = segment.origin;
   let originForwardDestination = segment.destination;
@@ -27,7 +25,7 @@ const Tickets = ({ price, carrier, segments }) => {
   let formattedResult = resultDate.format("HH:mm");
   let segmentStops = segment.stops.join(", ");
 
-  let segmentBack = segments[1]; //
+  let segmentBack = segments[1];
   let backOriginCity = segmentBack.origin;
   let backDestinationCity = segmentBack.destination;
   let backDate = segmentBack.date;
@@ -49,7 +47,6 @@ const Tickets = ({ price, carrier, segments }) => {
   let backResultDate = backFlyArriverTime.add(durationTime, "minutes");
   let backFormattedResult = backResultDate.format("HH:mm");
   let backSegmentStops = segmentBack.stops.join(", ");
-  // console.log(segmentBack);
 
   return (
     <li className={TicketCard.cover}>
