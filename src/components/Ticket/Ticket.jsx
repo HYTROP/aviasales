@@ -54,7 +54,7 @@ const Tickets = ({ price, carrier, segments }) => {
         <img src={`http://pics.avs.io/130/70/${carrier}.png`} alt=""></img>
       </div>
 
-      <div className={TicketCard.ticketInfo}>
+      <div className={TicketCard.ticketInfoFor}>
         <div className={TicketCard.flightLine}>
           <div className={TicketCard.infoDiv}>
             {originForward} - {originForwardDestination}
@@ -72,21 +72,23 @@ const Tickets = ({ price, carrier, segments }) => {
           <div className={TicketCard.infoDiv}>{segmentStops}</div>
         </div>
       </div>
-      <div className={TicketCard.flightLine}>
-        <div className={TicketCard.infoDiv}>
-          {backOriginCity} - {backDestinationCity}
+      <div className={TicketCard.ticketInfoBack}>
+        <div className={TicketCard.flightLine}>
+          <div className={TicketCard.infoDiv}>
+            {backOriginCity} - {backDestinationCity}
+          </div>
+          <div className={TicketCard.infoDiv}>В ПУТИ</div>
+          <div className={TicketCard.infoDiv}>
+            ПЕРЕСАДКИ: {segmentBack.stops.length}{" "}
+          </div>
         </div>
-        <div className={TicketCard.infoDiv}>В ПУТИ</div>
-        <div className={TicketCard.infoDiv}>
-          ПЕРЕСАДКИ: {segmentBack.stops.length}{" "}
+        <div className={TicketCard.infoLine}>
+          <div className={TicketCard.infoDiv}>
+            {backFormattedTime} - {backFormattedResult}
+          </div>
+          <div className={TicketCard.infoDiv}>{backFormattedDuration}</div>
+          <div className={TicketCard.infoDiv}>{backSegmentStops}</div>
         </div>
-      </div>
-      <div className={TicketCard.infoLine}>
-        <div className={TicketCard.infoDiv}>
-          {backFormattedTime} - {backFormattedResult}
-        </div>
-        <div className={TicketCard.infoDiv}>{backFormattedDuration}</div>
-        <div className={TicketCard.infoDiv}>{backSegmentStops}</div>
       </div>
     </li>
   );

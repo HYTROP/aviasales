@@ -70,11 +70,28 @@ header {
 .App {
   width: 100%;
   margin: 0 auto;
+  display: block;
 }
 
 .ticketsContent {
 
   display: flex;
   margin: 0 30vw;
-  /* width: 50%; */
+}
+
+
+@media (max-width: 420px) {
+  .ticketsContent {
+    box-sizing: border-box;
+    width: 100vw;
+    display: block;
+    flex-wrap: nowrap;
+    margin: 0 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .App {
+    overflow-x: hidden;
+  }
 }

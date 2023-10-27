@@ -1,22 +1,20 @@
 import ticketsStyle from "./TicketsFilter.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllFilters } from "../redux/filtersSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { filterTickets } from "../redux/ticketsSlice";
 import { CHECKBOXES as checkBoxes } from "./constants";
+import ModalWindow from "./VerticalMenu";
 
 function TicketsFilter() {
   const dispatch = useDispatch();
 
   const { selectedCheckBoxesId } = useSelector((store) => store.filters);
-
-  const { isLoading } = useSelector((store) => store.tickets);
+  const { ticketsData } = useSelector((store) => store.tickets);
 
   useEffect(() => {
-    if (isLoading === false) {
-      dispatch(filterTickets(selectedCheckBoxesId));
-    }
-  }, [isLoading, selectedCheckBoxesId]);
+    dispatch(filterTickets(selectedCheckBoxesId));
+  }, [selectedCheckBoxesId, ticketsData]);
 
   const handleFilterSet = (id) => {
     let newSelectedIds;
@@ -49,8 +47,23 @@ function TicketsFilter() {
     dispatch(setAllFilters(newSelectedIds));
   };
 
-  return (
-    <div className={ticketsStyle.containter}>
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 420);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 420);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Clean up function
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const filterContent = (
+    <div className={ticketsStyle.container}>
       <p>количество пересадок</p>
       <form>
         {checkBoxes.map((item) => (
@@ -67,6 +80,12 @@ function TicketsFilter() {
         ))}
       </form>
     </div>
+  );
+
+  return (
+    <>
+      {!isMobile ? filterContent : <ModalWindow>{filterContent}</ModalWindow>}
+    </>
   );
 }
 

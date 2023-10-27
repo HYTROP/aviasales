@@ -3,3 +3,14 @@ img {
   width: 80px;
   margin: 50px auto;
 }
+
+@media(max-width:420px) {
+  img {
+    margin: 0 0;
+    width: 60px;
+  }
+
+  .logostyle {
+    width: 100vw;
+  }
+}

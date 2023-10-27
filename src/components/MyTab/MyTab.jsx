@@ -47,7 +47,9 @@ const MyTab = () => {
         <div className={TabStyle.tabContent}>
           {isLoading && <Spinner />}
           {!displayedTickets.length && (
-            <div>Рейсов, подходящих под заданные фильтры, не найдено</div>
+            <div className={TabStyle.message}>
+              ❗️Рейсов, подходящих под заданные фильтры, не найдено❗️
+            </div>
           )}
           <TicketsList tickets={displayedTickets} />
         </div>

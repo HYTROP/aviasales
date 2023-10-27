@@ -3,22 +3,31 @@
   padding: 10px;
   width: 480px;
   height: 212px;
-  /* border: 1px solid white; */
   border-radius: 5px;
   background-color: white;
+}
 
-
+@media(max-width:420px) {
+  .cover {
+    display: block;
+    margin: 20px 0;
+    padding: 10px;
+    width: 98vw;
+    height: 195px;
+    border-radius: 5px;
+    background-color: white;
+  }
 }
 
 .h1 {
-  margin: 15px;
+  margin: 20px 15px;
   width: 150px;
   height: 20px;
   color: #2196F3;
 }
 
 .logo {
-  margin: 15px;
+  margin: 10px;
   position: relative;
   bottom: 65px;
   float: right;
@@ -26,10 +35,26 @@
 
 .logo img {
   margin: 0;
+  width: 100px;
 }
 
-.ticketInfo {
+@media(max-width:420px) {
+  .logo img {
+    margin: 0;
+    width: 90px;
+  }
+}
+
+.ticketInfoFor {
   position: absolute;
+  width: 480px;
+  height: 40px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ticketInfoBack {
+  position: relative;
   width: 480px;
   height: 40px;
   display: flex;
@@ -40,18 +65,46 @@
   width: 480px;
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-around; */
-
   margin: 0 20px;
+
   color: #A0B0B9;
   font-family: Open Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
   line-height: 18px;
-  /* 150% */
   letter-spacing: 0.5px;
   text-transform: uppercase;
+}
+
+@media(max-width:420px) {
+  .ticketInfoFor {
+    max-width: 100vw;
+    position: relative;
+    top: -70px;
+  }
+
+  .ticketInfoBack {
+    max-width: 100vw;
+    position: relative;
+    top: -60px;
+  }
+
+  .flightLine {
+    /* max-width: 60px; */
+    position: relative;
+  }
+
+  .infoLine {
+    max-width: 100vw;
+
+  }
+
+  .infoDiv {
+    max-width: 80px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
 }
 
 .infoDiv {
@@ -63,7 +116,6 @@
   width: 480px;
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-around; */
   margin: 0 20px;
   color: #4A4A4A;
   font-family: Open Sans;
@@ -71,5 +123,4 @@
   font-style: normal;
   font-weight: 600;
   line-height: 21px;
-  /* 150% */
 }
