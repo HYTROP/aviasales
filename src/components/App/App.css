@@ -74,9 +74,8 @@ header {
 }
 
 .ticketsContent {
-
+  justify-content: center;
   display: flex;
-  margin: 0 30vw;
 }
 
 
