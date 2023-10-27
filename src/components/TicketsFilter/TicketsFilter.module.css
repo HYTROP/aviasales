@@ -40,7 +40,8 @@ p {
   }
 
   form {
-    width: 50px;
+    max-width: 230px;
+    margin: 0 0;
   }
 }
 
