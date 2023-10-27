@@ -63,9 +63,9 @@ function TicketsFilter() {
   }, []);
 
   const filterContent = (
-    <div className={ticketsStyle.container}>
-      <p>количество пересадок</p>
+    <>
       <form>
+        <p>количество пересадок</p>
         {checkBoxes.map((item) => (
           <div className={ticketsStyle.check} key={item.id}>
             <input
@@ -79,13 +79,13 @@ function TicketsFilter() {
           </div>
         ))}
       </form>
-    </div>
+    </>
   );
 
   return (
-    <>
+    <div className={ticketsStyle.container}>
       {!isMobile ? filterContent : <ModalWindow>{filterContent}</ModalWindow>}
-    </>
+    </div>
   );
 }
 

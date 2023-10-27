@@ -14,6 +14,7 @@
 
  .tabs {
    width: 100%;
+   display: flex;
  }
 
  .message {
@@ -39,7 +40,7 @@
  }
 
  .buttonActive:disabled {
-   width: 240px;
+   width: 200px;
    height: 50px;
    border: none;
    background-color: #2196F3;
@@ -57,7 +58,7 @@
  }
 
  .buttonActive {
-   width: 240px;
+   width: 200px;
    height: 50px;
    border: 1px solid #a8a8a8;
    border-radius: 5px;
@@ -80,6 +81,14 @@
      max-height: 50px;
      font-size: 10px;
    }
+
+   .buttonActive:disabled {
+     max-width: 33vw;
+     max-height: 50px;
+     font-size: 10px;
+   }
+
+
  }
 
  .content {

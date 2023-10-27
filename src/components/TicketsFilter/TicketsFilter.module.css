@@ -15,6 +15,11 @@
   }
 }
 
+form {
+  background-color: #ffffff;
+  margin: 0 20px;
+}
+
 p {
   padding: 20px 20px;
 

@@ -4,6 +4,12 @@ img {
   margin: 50px auto;
 }
 
+.img {
+  width: 100px;
+
+  margin: 0 auto;
+}
+
 @media(max-width:420px) {
   img {
     margin: 0 0;
