@@ -7,7 +7,7 @@ img {
 .img {
   width: 100px;
 
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 @media(max-width:420px) {
@@ -18,5 +18,9 @@ img {
 
   .logostyle {
     width: 100vw;
+  }
+
+  .img {
+    position: absolute;
   }
 }

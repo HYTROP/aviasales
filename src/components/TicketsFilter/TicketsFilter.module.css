@@ -38,6 +38,10 @@ p {
     padding: 5 50px;
     font-size: 11px;
   }
+
+  form {
+    width: 50px;
+  }
 }
 
 input[type=checkbox] {
